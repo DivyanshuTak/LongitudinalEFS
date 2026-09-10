@@ -11,11 +11,11 @@ COLS = ["pat_id", "scandate", "label", "cohort"]
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--bch-train", default="./splits/DEV.csv")
-    ap.add_argument("--bch-val", default="./splits/TEST.csv")
-    ap.add_argument("--cbtn", default="./eval_csvs/cbtn/cbtn_efs1y.csv")
-    ap.add_argument("--out-train", default="./splits/combined_bch_cbtn_train.csv")
-    ap.add_argument("--out-val", default="./splits/combined_bch_cbtn_val.csv")
+    ap.add_argument("--bch-train", default="./data/splits/DEV.csv")
+    ap.add_argument("--bch-val", default="./data/splits/TEST.csv")
+    ap.add_argument("--cbtn", default="./data/eval_csvs/cbtn/cbtn_efs1y.csv")
+    ap.add_argument("--out-train", default="./data/splits/combined_bch_cbtn_train.csv")
+    ap.add_argument("--out-val", default="./data/splits/combined_bch_cbtn_val.csv")
     ap.add_argument("--val-frac", type=float, default=0.2)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()

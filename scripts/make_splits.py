@@ -30,9 +30,9 @@ def drop_missing_scans(df: pd.DataFrame, emb_dir: str) -> pd.DataFrame:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default="../bch_longitudinal_data_latest/efs1y_postsurg_max6.csv")
-    ap.add_argument("--emb_dir", default="../bch_longitudinal_data_latest/neurovfm_embeddings")
-    ap.add_argument("--out_dir", default="./splits")
+    ap.add_argument("--csv", default="./data/raw/bch/efs1y_postsurg_max6.csv")
+    ap.add_argument("--emb_dir", default="./data/embeddings/bch")
+    ap.add_argument("--out_dir", default="./data/splits")
     ap.add_argument("--folds", type=int, default=5)
     ap.add_argument("--test_frac", type=float, default=0.2,
                     help="Held out before folding; 0 disables the test set.")

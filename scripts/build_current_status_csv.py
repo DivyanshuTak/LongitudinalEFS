@@ -15,19 +15,19 @@ COHORT, MAX_LEN, MIN_LEN = sys.argv[1], 6, 2
 BCH_SPLIT = sys.argv[3] if len(sys.argv) > 3 else "TEST"   # bch only: DEV or TEST
 TOL = int(sys.argv[2]) if len(sys.argv) > 2 else 15
 if COHORT == "bch":   # BCH TEST split; label source = clinical metadata progression date
-    lon = pd.read_csv("../bch_longitudinal_data_latest/longitudinal_from_pool.csv", header=None, names=["pat_id", "scandate"], dtype=str).set_index("pat_id")["scandate"]
-    efs = pd.read_csv(f"splits/{BCH_SPLIT}.csv", dtype={"pat_id": str, "scandate": str})
-    meta = pd.read_csv("../bch_longitudinal_data_latest/lgg_bch_metadata_deidentified.csv", dtype={"BCH MRN": str}).groupby("BCH MRN", as_index=False).first().set_index("BCH MRN")
+    lon = pd.read_csv("data/raw/bch/longitudinal_from_pool.csv", header=None, names=["pat_id", "scandate"], dtype=str).set_index("pat_id")["scandate"]
+    efs = pd.read_csv(f"data/splits/{BCH_SPLIT}.csv", dtype={"pat_id": str, "scandate": str})
+    meta = pd.read_csv("data/raw/bch/lgg_bch_metadata_deidentified.csv", dtype={"BCH MRN": str}).groupby("BCH MRN", as_index=False).first().set_index("BCH MRN")
     efs["pfs"] = (meta.loc[efs.pat_id, "Progression"].values == "Yes").astype(int)
     efs["n_scans"] = efs.scandate.str.count("-") + 1
     efs["days_last_scan_to_event"] = None
 else:
-    lon = pd.read_csv(f"eval_csvs/{COHORT}/{COHORT}_longitudinal.csv", dtype=str).set_index("pat_id")["scandate"]
-    efs = pd.read_csv(f"eval_csvs/{COHORT}/{COHORT}_efs1y.csv", dtype={"pat_id": str, "scandate": str})
+    lon = pd.read_csv(f"data/raw/{COHORT}/{COHORT}_longitudinal.csv", dtype=str).set_index("pat_id")["scandate"]
+    efs = pd.read_csv(f"data/eval_csvs/{COHORT}/{COHORT}_efs1y.csv", dtype={"pat_id": str, "scandate": str})
 
 if COHORT == "cbtn":
     from build_cbtn_efs_csv import build_anchors
-    anchors = build_anchors("eval_csvs/cbtn/cbtn_all_2023-09-15_LGG.csv")
+    anchors = build_anchors("data/raw/cbtn/cbtn_all_2023-09-15_LGG.csv")
     def timeline(pid):
         a = anchors[pid]
         scans = sorted(int(d) for d in lon[pid].split("-"))
@@ -42,7 +42,7 @@ elif COHORT == "bch":
         return scans, pd.to_datetime(r["Date of First Progression"]).to_pydatetime(), True
     days, fmt = lambda s, e: (s - e).days, lambda d: d.strftime("%Y%m%d")
 else:
-    lab = pd.read_csv("../DirectEFS_NeuroJEPA/endpoint_csvs/pbtc_set4/efs_data_set1.csv", dtype={"accessionnumber": str}).drop_duplicates("accessionnumber").set_index("accessionnumber")
+    lab = pd.read_csv("data/raw/pbtc/efs_data_set1.csv", dtype={"accessionnumber": str}).drop_duplicates("accessionnumber").set_index("accessionnumber")
     def timeline(pid):
         scans = sorted(datetime.strptime(d, "%Y%m%d") for d in lon[pid].split("-"))
         return scans, scans[0] + timedelta(days=float(lab.at[pid, "pfs_time"])), int(lab.at[pid, "pfs"]) == 1
@@ -70,7 +70,7 @@ for r in efs.itertuples():
                      days_last_scan_to_event=-days(prog, event), pfs=1, status="progression_scan"))
 
 out = pd.DataFrame(rows)
-OUT = f"splits/{BCH_SPLIT}_current_status.csv" if COHORT == "bch" else f"eval_csvs/{COHORT}/{COHORT}_current_status.csv"
+OUT = f"data/splits/{BCH_SPLIT}_current_status.csv" if COHORT == "bch" else f"data/eval_csvs/{COHORT}/{COHORT}_current_status.csv"
 out.to_csv(OUT, index=False)
 print(f"{OUT}: {len(out)} patients, {int(out.label.sum())} positive ({out.label.mean():.1%}); "
       f"progressors dropped: {dropped}; progressors that were label 0 in the EFS csv and are now 1: {n_prev_neg_now_pos}")

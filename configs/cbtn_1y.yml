@@ -1,14 +1,14 @@
 data:
-  emb_dir: ../bch_longitudinal_data_latest/neurovfm_embeddings
-  split_dir: ./splits
-  train_csv: ./splits/cbtn_only_csplit_train.csv
-  val_csv: ./splits/cbtn_only_csplit_val.csv
+  emb_dir: ./data/embeddings/bch
+  split_dir: ./data/splits
+  train_csv: ./data/splits/cbtn_only_csplit_train.csv
+  val_csv: ./data/splits/cbtn_only_csplit_val.csv
   cohorts:
     bch:
-      emb_dir: ../bch_longitudinal_data_latest/neurovfm_embeddings
+      emb_dir: ./data/embeddings/bch
       date_format: yyyymmdd
     cbtn:
-      emb_dir: /media/sdb/divyanshu/divyanshu/genai_prognosis/cbtn_neurovfm_embeddings
+      emb_dir: ./data/embeddings/cbtn
       date_format: int
   max_seq_len: 6
   n_views: 5

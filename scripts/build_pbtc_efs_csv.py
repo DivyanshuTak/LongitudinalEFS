@@ -16,9 +16,9 @@ HORIZON = 365
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--longitudinal", default="./eval_csvs/pbtc/pbtc_longitudinal.csv")
-    ap.add_argument("--labels", default="../DirectEFS_NeuroJEPA/endpoint_csvs/pbtc_set4/efs_data_set1.csv")
-    ap.add_argument("--output", default="./eval_csvs/pbtc/pbtc_efs1y.csv")
+    ap.add_argument("--longitudinal", default="./data/raw/pbtc/pbtc_longitudinal.csv")
+    ap.add_argument("--labels", default="./data/raw/pbtc/efs_data_set1.csv")
+    ap.add_argument("--output", default="./data/eval_csvs/pbtc/pbtc_efs1y.csv")
     ap.add_argument("--max-scans", type=int, default=6)
     ap.add_argument("--min-scans", type=int, default=2)
     ap.add_argument("--horizon", type=int, default=HORIZON)

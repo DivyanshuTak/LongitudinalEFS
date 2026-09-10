@@ -26,7 +26,7 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--config", type=str, default="config.yml")
     p.add_argument("--fold", type=int, default=None,
-                   help="Retarget data.train_csv/val_csv and the run name at splits/fold{k}_*.csv.")
+                   help="Retarget data.train_csv/val_csv and the run name at data/splits/fold{k}_*.csv.")
     return p.parse_args()
 
 
@@ -36,7 +36,7 @@ def main():
         config = yaml.safe_load(f)
 
     if args.fold is not None:
-        split_dir = config["data"].get("split_dir", "./splits")
+        split_dir = config["data"].get("split_dir", "./data/splits")
         config["data"]["train_csv"] = f"{split_dir}/fold{args.fold}_TRAIN.csv"
         config["data"]["val_csv"] = f"{split_dir}/fold{args.fold}_VAL.csv"
         config["logger"]["run_name"] = f"{config['logger']['run_name']}_fold{args.fold}"

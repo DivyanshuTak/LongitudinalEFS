@@ -15,17 +15,17 @@ import numpy as np, pandas as pd
 sys.path.insert(0, "scripts")
 
 COHORT, TOL, MAX_LEN = sys.argv[1], int(sys.argv[2]) if len(sys.argv) > 2 else 60, 6
-lon = pd.read_csv(f"eval_csvs/{COHORT}/{COHORT}_longitudinal.csv", dtype=str).set_index("pat_id")["scandate"]
-efs = pd.read_csv(f"eval_csvs/{COHORT}/{COHORT}_efs1y.csv", dtype={"pat_id": str})
+lon = pd.read_csv(f"data/raw/{COHORT}/{COHORT}_longitudinal.csv", dtype=str).set_index("pat_id")["scandate"]
+efs = pd.read_csv(f"data/eval_csvs/{COHORT}/{COHORT}_efs1y.csv", dtype={"pat_id": str})
 if COHORT == "cbtn":
     from build_cbtn_efs_csv import build_anchors
-    A = build_anchors("eval_csvs/cbtn/cbtn_all_2023-09-15_LGG.csv")
+    A = build_anchors("data/raw/cbtn/cbtn_all_2023-09-15_LGG.csv")
     def timeline(p):
         a = A[p]; s = sorted(int(d) for d in lon[p].split("-"))
         return [x for x in s if x >= a["diagnosis_age"] + 1], a["diagnosis_age"] + a["efs"], bool(a["had_event"])
     days, fmt, plus = lambda s, e: s - e, str, lambda s, n: s + n
 else:
-    lab = pd.read_csv("../DirectEFS_NeuroJEPA/endpoint_csvs/pbtc_set4/efs_data_set1.csv", dtype={"accessionnumber": str}).drop_duplicates("accessionnumber").set_index("accessionnumber")
+    lab = pd.read_csv("data/raw/pbtc/efs_data_set1.csv", dtype={"accessionnumber": str}).drop_duplicates("accessionnumber").set_index("accessionnumber")
     def timeline(p):
         s = sorted(datetime.strptime(d, "%Y%m%d") for d in lon[p].split("-"))
         return s, s[0] + timedelta(days=float(lab.at[p, "pfs_time"])), int(lab.at[p, "pfs"]) == 1
@@ -55,7 +55,7 @@ for p in efs.pat_id:
         rows.append(dict(pat_id=p, scandate="-".join(map(fmt, keep)), label=int(prog_scan is not None and sel[-1] == prog_scan),
                          landmark_year=t, n_scans=len(keep), n_scans_available=len(sel), anchor_scan=fmt(sel[-1]), pfs=int(prog)))
 df = pd.DataFrame(rows)
-OUT = f"eval_csvs/{COHORT}/{COHORT}_current_status_landmarks.csv"
+OUT = f"data/eval_csvs/{COHORT}/{COHORT}_current_status_landmarks.csv"
 df.to_csv(OUT, index=False)
 print(f"{OUT}: rows {len(df)}, patients {df.pat_id.nunique()}, positives {int(df.label.sum())} ({df.label.mean():.1%})")
 print(df.groupby("landmark_year").agg(rows=("pat_id", "size"), positives=("label", "sum")).T.to_string())

@@ -15,8 +15,8 @@ import sys
 import pandas as pd
 
 COHORT = sys.argv[1] if len(sys.argv) > 1 else "cbtn"
-LON, EFS = f"eval_csvs/{COHORT}/{COHORT}_longitudinal.csv", f"eval_csvs/{COHORT}/{COHORT}_efs1y.csv"
-OUT = f"eval_csvs/{COHORT}/{COHORT}_efs1y_landmarks.csv"
+LON, EFS = f"data/raw/{COHORT}/{COHORT}_longitudinal.csv", f"data/eval_csvs/{COHORT}/{COHORT}_efs1y.csv"
+OUT = f"data/eval_csvs/{COHORT}/{COHORT}_efs1y_landmarks.csv"
 # CBTN dates are age-in-days; PBTC dates are YYYYMMDD -> work in days, print back in the input format
 if COHORT == "cbtn":
     to_day, to_str = int, str

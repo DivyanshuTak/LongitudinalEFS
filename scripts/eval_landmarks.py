@@ -2,8 +2,8 @@
 Reports AUROC/AUPRC per landmark year (row bootstrap) and pooled over all rows
 (patient-clustered bootstrap).
 
-  python scripts/eval_landmarks.py --ckpt X.ckpt --csv eval_csvs/cbtn/cbtn_efs1y_landmarks.csv \
-      --emb_dir ... --date_format int --out eval_out/landmarks_<name>
+  python scripts/eval_landmarks.py --ckpt X.ckpt --csv data/eval_csvs/cbtn/cbtn_efs1y_landmarks.csv \
+      --emb_dir data/embeddings/cbtn --date_format int --out eval_out/landmarks_<name>
 """
 import argparse
 import os

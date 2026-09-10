@@ -39,9 +39,9 @@ def build_anchors(meta_path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--longitudinal", default="./eval_csvs/cbtn/cbtn_longitudinal.csv")
-    ap.add_argument("--meta", default="./eval_csvs/cbtn/cbtn_all_2023-09-15_LGG.csv")
-    ap.add_argument("--output", default="./eval_csvs/cbtn/cbtn_efs1y.csv")
+    ap.add_argument("--longitudinal", default="./data/raw/cbtn/cbtn_longitudinal.csv")
+    ap.add_argument("--meta", default="./data/raw/cbtn/cbtn_all_2023-09-15_LGG.csv")
+    ap.add_argument("--output", default="./data/eval_csvs/cbtn/cbtn_efs1y.csv")
     ap.add_argument("--max-scans", type=int, default=6)
     ap.add_argument("--min-scans", type=int, default=2)
     ap.add_argument("--horizon", type=int, default=365)

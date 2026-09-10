@@ -8,8 +8,8 @@ import pandas as pd
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default="../bch_longitudinal_data_latest/efs1y_postsurg_max6.csv")
-    ap.add_argument("--emb_dir", default="../bch_longitudinal_data_latest/neurovfm_embeddings")
+    ap.add_argument("--csv", default="./data/raw/bch/efs1y_postsurg_max6.csv")
+    ap.add_argument("--emb_dir", default="./data/embeddings/bch")
     ap.add_argument("--n_views", type=int, default=5)
     args = ap.parse_args()
 

@@ -12,15 +12,11 @@ import argparse
 import os
 import sys
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-
-
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--manifest",
-                   default=f"{ROOT}/bch_longitudinal_data_latest/main_data_pool_selected.csv")
-    p.add_argument("--pool-dir", default=f"{ROOT}/bch_longitudinal_data_latest/main_data_pool")
-    p.add_argument("--out-dir", default=f"{ROOT}/bch_longitudinal_data_latest/neurovfm_embeddings")
+    p.add_argument("--manifest", default="./data/raw/bch/main_data_pool_selected.csv")
+    p.add_argument("--pool-dir", required=True, help="dir holding the NIfTIs named in the manifest")
+    p.add_argument("--out-dir", default="./data/embeddings/bch")
     p.add_argument("--model", default="mlinslab/neurovfm-encoder",
                    help="HF repo id, or local dir with config.json + pytorch_model.bin")
     p.add_argument("--gpu", default="0")
