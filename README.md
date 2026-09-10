@@ -1,8 +1,6 @@
 # LongitudinalEFS
 
-Progression prediction from longitudinal pediatric low-grade glioma MRI on frozen
-NeuroVFM patch tokens. Trained on BCH + CBTN, externally tested on PBTC.
-
+Progression prediction from longitudinal pediatric low-grade glioma MRI 
 ## Model
 
 ```
