@@ -1,0 +1,8 @@
+__pycache__/
+.pytest_cache/
+wandb/
+logs/
+checkpoints*/
+eval_out/
+splits/
+eval_csvs/

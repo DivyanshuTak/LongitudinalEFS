@@ -1,0 +1,65 @@
+data:
+  emb_dir: ../bch_longitudinal_data_latest/neurovfm_embeddings
+  split_dir: ./splits
+  train_csv: ./splits/combined_bch_cbtn_train.csv
+  val_csv: ./splits/combined_bch_cbtn_val.csv
+  cohorts:
+    bch:
+      emb_dir: ../bch_longitudinal_data_latest/neurovfm_embeddings
+      date_format: yyyymmdd
+    cbtn:
+      emb_dir: /media/sdb/divyanshu/divyanshu/genai_prognosis/cbtn_neurovfm_embeddings
+      date_format: int
+  max_seq_len: 6
+  n_views: 5
+  augment_views: true
+  batch_size: 16
+  num_workers: 8
+model:
+  mode: imaging
+  clinical_hidden: 32
+  clinical_dropout: 0.3
+  feature_dim: 768
+  n_modalities: 3
+  pool:
+    source: vfm
+    vfm_repo: mlinslab/neurovfm-dx-mri
+    vfm_label: low_grade_glioma
+    vfm_freeze: true
+  fusion: per_modality
+  fusion_dim: 768
+  time_dim: 0
+  min_period_days: 30.0
+  max_period_days: 2000.0
+  temporal: gru
+  hidden: 128
+  num_layers: 1
+  nhead: 8
+  readout: last
+  dropout: 0.1
+optim:
+  lr: 0.0003
+  weight_decay: 0.05
+train:
+  precision: bf16-mixed
+  max_epochs: 80
+  grad_clip: 1.0
+  pos_weight: 2
+  seed: 42
+  checkpoint_monitor: val_auroc
+  save_top_k: 3
+  early_stopping_patience: 25
+  early_stopping_monitor: val_auroc
+gpu:
+  visible_device: '0'
+logger:
+  save_dir: ./checkpoints/efs_combined_bch_cbtn_vfmpool_frozen_gru128
+  save_name: efs_combined_bch_cbtn_vfmpool_frozen_gru128-{epoch:02d}-{val_auroc:.3f}
+  run_name: efs_combined_bch_cbtn_vfmpool_frozen_gru128
+  project_name: LongitudinalEFS_NeuroVFM
+infer:
+  checkpoint: null
+  test_csv: null
+  emb_dir: null
+  threshold: 0.5
+  out_dir: ./eval_out
